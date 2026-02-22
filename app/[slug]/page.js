@@ -46,7 +46,20 @@ async function NotionRenderer({ blockId, token }) {
             return <li key={id} style={{ marginLeft: '1.2em', marginBottom: '0.5em' }}>{renderText(value.rich_text)}</li>;
           case 'image':
             const src = value.type === 'external' ? value.external.url : value.file?.url;
-            return src ? <img key={id} src={src} style={{ maxWidth: '100%', borderRadius: '8px', margin: '1em 0', display: 'block' }} /> : null;
+            return src ? (
+              <div style={{ margin: '1.5em 0', textAlign: 'center' }}>
+                <img 
+                  src={src} 
+                  style={{ 
+                    maxWidth: '100%', 
+                    maxHeight: '400px', // 🚨 改动点：限制高度，防止印章等小图过大
+                    objectFit: 'contain', // 🚨 改动点：保持比例不缩放
+                    borderRadius: '8px',
+                    display: 'inline-block' 
+                  }} 
+                />
+              </div>
+            ) : null;
           
           // 🚨 处理分栏布局：递归调用自己去渲染每一列的内容
           case 'column_list':
@@ -119,16 +132,31 @@ export default async function DynamicPage({ params }) {
     );
   }
 
-  return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
-      <nav style={{ marginBottom: '30px' }}>
-        <Link href="/" style={{ color: '#888', textDecoration: 'none' }}>← Back to Home</Link>
+return (
+    <div style={{ 
+      maxWidth: '850px', // 稍微宽一点点，更有呼吸感
+      margin: '0 auto', 
+      padding: '40px 20px',
+      // 🚨 改动点：全套清爽字体族
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      color: '#222', // 深灰比纯黑更高级
+      lineHeight: '1.7', // 稍微调大行高，阅读更舒服
+      WebkitFontSmoothing: 'antialiased' // 让字体在 Mac/iPhone 上更清爽
+    }}>
+      <nav style={{ marginBottom: '40px' }}>
+        <Link href="/" style={{ color: '#999', textDecoration: 'none', fontSize: '14px' }}>← Back to Home</Link>
       </nav>
-      <h1 style={{ fontSize: '2.8em', fontWeight: 'bold', marginBottom: '40px' }}>
+      
+      <h1 style={{ 
+        fontSize: '2.6em', 
+        fontWeight: '800', 
+        marginBottom: '40px',
+        letterSpacing: '-0.03em' // 🚨 改动点：紧凑的标题字间距是清爽风的关键
+      }}>
         {page.properties.title.title[0]?.plain_text}
       </h1>
       
-      {/* 开启深度递归渲染 */}
+      {/* 渲染正文 */}
       <NotionRenderer blockId={page.id} token={TOKEN} />
     </div>
   );
