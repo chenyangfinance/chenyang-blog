@@ -12,28 +12,24 @@ export default function RootLayout({ children }) {
         margin: 0,
         padding: 0,
         backgroundColor: '#fff',
-        // 全站统一字体族
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
         color: '#1a1a1a',
         lineHeight: '1.6',
         WebkitFontSmoothing: 'antialiased'
       }}>
-        {/* 全局导航栏 - 增加高度和间距 */}
-        <header style={{ 
-          borderBottom: '1px solid #f0f0f0', // 增加一条极细的分割线，增加精致感
-          marginBottom: '20px'
-        }}>
+        {/* 顶部导航 - 确保与内容区宽度严格一致 */}
+        <header style={{ width: '100%' }}>
           <div style={{
-            maxWidth: '900px', // 稍微放宽一点
+            maxWidth: '850px', // 🚨 关键：这里要和 page.js 里的 maxWidth 一致
             margin: '0 auto',
-            padding: '30px 20px',
+            padding: '40px 20px 20px 20px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center'
           }}>
             <Link href="/" style={{ 
               fontSize: '22px', 
-              fontWeight: '700', 
+              fontWeight: 'bold', 
               textDecoration: 'none', 
               color: '#000',
               letterSpacing: '-0.5px'
@@ -51,34 +47,35 @@ export default function RootLayout({ children }) {
           </div>
         </header>
 
-        {/* 页面主内容区 */}
-        <main style={{ minHeight: '60vh' }}>
+        {/* 主内容区 - 首页不正常通常是因为这里没居中 */}
+        <main style={{ 
+          maxWidth: '850px', 
+          margin: '0 auto', 
+          padding: '0 20px',
+          minHeight: '70vh' 
+        }}>
           {children}
         </main>
 
-        {/* 底部信息栏 */}
         <footer style={{ 
-          maxWidth: '900px', 
-          margin: '100px auto 50px', 
-          padding: '0 20px', 
+          maxWidth: '850px', 
+          margin: '80px auto 40px', 
+          padding: '20px 20px', 
           textAlign: 'center',
-          borderTop: '1px solid #f0f0f0',
-          paddingTop: '30px',
-          color: '#888',
-          fontSize: '14px'
+          borderTop: '1px solid #f5f5f5',
+          color: '#999',
+          fontSize: '13px'
         }}>
-          © {new Date().getFullYear()} Chen Yang | Powered by Notion
+          © {new Date().getFullYear()} Chen Yang | Powered by Notion & Next.js
         </footer>
       </body>
     </html>
   );
 }
 
-// 统一的导航链接样式
 const navLinkStyle = {
-  color: '#555',
+  color: '#666',
   textDecoration: 'none',
   fontSize: '15px',
-  fontWeight: '500',
-  transition: 'color 0.2s'
+  fontWeight: '500'
 };
