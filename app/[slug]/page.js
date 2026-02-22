@@ -52,7 +52,7 @@ async function NotionRenderer({ blockId, token }) {
                   src={src} 
                   style={{ 
                     maxWidth: '100%', 
-                    maxHeight: '400px', // 🚨 改动点：限制高度，防止印章等小图过大
+                    maxHeight: '100px', // 🚨 改动点：限制高度，防止印章等小图过大
                     objectFit: 'contain', // 🚨 改动点：保持比例不缩放
                     borderRadius: '8px',
                     display: 'inline-block' 
