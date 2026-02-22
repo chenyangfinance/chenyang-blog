@@ -12,16 +12,14 @@ export default async function HomePage() {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      // 🚨 重新装上安保系统：只放行 status 这一列为 Published 的文章
+      // 🚨 同时满足：status 是 Published 且 type 是 Post
       filter: {
-        property: 'status', 
-        select: {
-          equals: 'Published'
-        }
+        and: [
+          { property: 'status', select: { equals: 'Published' } },
+          { property: 'type', select: { equals: 'Post' } }
+        ]
       },
-      sorts: [
-        { timestamp: 'created_time', direction: 'descending' } 
-      ]
+      sorts: [{ timestamp: 'created_time', direction: 'descending' }]
     }),
     next: { revalidate: 60 }
   });
