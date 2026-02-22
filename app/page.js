@@ -12,7 +12,16 @@ export default async function HomePage() {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      sorts: [{ timestamp: 'created_time', direction: 'descending' }]
+      // 🚨 重新装上安保系统：只放行 status 这一列为 Published 的文章
+      filter: {
+        property: 'status', 
+        select: {
+          equals: 'Published'
+        }
+      },
+      sorts: [
+        { timestamp: 'created_time', direction: 'descending' } 
+      ]
     }),
     next: { revalidate: 60 }
   });
