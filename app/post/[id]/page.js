@@ -1,101 +1,105 @@
 import Link from 'next/link';
 
-// 这个小工具专门负责把 Notion 的段落、标题、代码块翻译成网页元素
-function renderBlock(block) {
-  const { type, id } = block;
-  const value = block[type];
-
-  // 提取加粗、斜体等文本样式
-  const textContent = value?.rich_text?.map((text, i) => {
-    let content = text.plain_text;
-    if (text.annotations.bold) content = <strong key={i}>{content}</strong>;
-    if (text.annotations.italic) content = <em key={i}>{content}</em>;
-    if (text.annotations.code) content = <code key={i} style={{background: '#eee', padding: '2px 4px', borderRadius: '4px'}}>{content}</code>;
-    if (text.href) content = <a key={i} href={text.href} target="_blank" style={{color: '#0066cc', textDecoration: 'underline'}}>{content}</a>;
-    return <span key={i}>{content}</span>;
-  }) || [];
-
-  switch (type) {
-    case 'paragraph':
-      return <p key={id} style={{ lineHeight: '1.8', marginBottom: '16px', color: '#333' }}>{textContent.length ? textContent : <br />}</p>;
-    case 'heading_1':
-      return <h1 key={id} style={{ marginTop: '2em', marginBottom: '1em', fontSize: '28px' }}>{textContent}</h1>;
-    case 'heading_2':
-      return <h2 key={id} style={{ marginTop: '1.5em', marginBottom: '0.75em', fontSize: '24px' }}>{textContent}</h2>;
-    case 'heading_3':
-      return <h3 key={id} style={{ marginTop: '1.2em', marginBottom: '0.5em', fontSize: '20px' }}>{textContent}</h3>;
-    case 'bulleted_list_item':
-    case 'numbered_list_item':
-      return <li key={id} style={{ lineHeight: '1.8', marginLeft: '20px', color: '#333' }}>{textContent}</li>;
-    case 'image':
-      const src = value.type === 'external' ? value.external.url : value.file.url;
-      return <img key={id} src={src} alt="Notion Image" style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '16px', marginBottom: '16px' }} />;
-    case 'code':
-      return (
-        <pre key={id} style={{ background: '#f4f4f4', padding: '16px', borderRadius: '8px', overflowX: 'auto', fontSize: '14px', marginBottom: '16px' }}>
-          <code>{textContent}</code>
-        </pre>
-      );
-    default:
-      return null; // 其他复杂的表格、数据库块暂时不显示
-  }
-}
+// 这里放上面的 renderBlock 函数代码...
 
 export default async function PostPage({ params }) {
-  // 获取刚刚从主页传过来的文章 ID
   const { id } = await params;
   const TOKEN = process.env.NOTION_AUTH_TOKEN;
 
-  // 1. 获取文章的标题信息
+  // 1. 获取文章属性（标题等）
   const pageRes = await fetch(`https://api.notion.com/v1/pages/${id}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${TOKEN}`,
-      'Notion-Version': '2022-06-28',
-    },
-    next: { revalidate: 60 }
+    headers: { 'Authorization': `Bearer ${TOKEN}`, 'Notion-Version': '2022-06-28' },
   });
   
-  // 2. 获取文章的具体正文内容 (Blocks)
+  // 2. 获取文章所有内容块
   const blocksRes = await fetch(`https://api.notion.com/v1/blocks/${id}/children?page_size=100`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${TOKEN}`,
-      'Notion-Version': '2022-06-28',
-    },
-    next: { revalidate: 60 }
+    headers: { 'Authorization': `Bearer ${TOKEN}`, 'Notion-Version': '2022-06-28' },
   });
 
-  if (!pageRes.ok || !blocksRes.ok) {
-    return <div style={{marginTop: '50px', textAlign: 'center'}}>🚨 文章加载失败，请检查是否删除了该文章。</div>;
-  }
+  if (!pageRes.ok || !blocksRes.ok) return <div style={{padding: '50px'}}>加载失败</div>;
 
   const pageData = await pageRes.json();
   const blocksData = await blocksRes.json();
 
-  // 挖出标题
-  const titleKeys = Object.keys(pageData.properties).filter(k => pageData.properties[k].type === 'title');
-  const titleProp = titleKeys.length > 0 ? pageData.properties[titleKeys[0]] : null;
-  const titleText = titleProp?.title?.[0]?.plain_text || '无标题';
+  // 获取标题
+  const title = pageData.properties.title?.title[0]?.plain_text || "无标题";
 
   return (
-    <div style={{ maxWidth: '750px', margin: '0 auto', paddingBottom: '80px' }}>
-      {/* 返回按钮 */}
-      <div style={{ marginBottom: '40px' }}>
-        <Link href="/" style={{ color: '#888', textDecoration: 'none', fontSize: '15px' }}>
-          &larr; Back to Home
-        </Link>
-      </div>
-      
-      {/* 文章大标题 */}
-      <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '40px', lineHeight: '1.4' }}>
-        {titleText}
-      </h1>
-
-      {/* 逐个渲染文章的段落、图片 */}
-      <div style={{ fontSize: '16px' }}>
+    <article style={{ maxWidth: '700px', margin: '0 auto', padding: '40px 20px' }}>
+      <Link href="/" style={{ color: '#888', textDecoration: 'none' }}>← Back</Link>
+      <h1 style={{ fontSize: '2.5em', marginTop: '20px', marginBottom: '40px' }}>{title}</h1>
+      <div>
         {blocksData.results.map(block => renderBlock(block))}
       </div>
-    </div>
+    </article>
   );
+}
+
+function renderBlock(block) {
+  const { type, id } = block;
+  const value = block[type];
+
+  // 1. 处理富文本（加粗、链接、颜色等）
+  const renderText = (textArr) => {
+    if (!textArr) return null;
+    return textArr.map((text, i) => {
+      const { annotations, plain_text, href } = text;
+      let element = <span key={i} style={{
+        fontWeight: annotations.bold ? 'bold' : 'normal',
+        fontStyle: annotations.italic ? 'italic' : 'normal',
+        textDecoration: annotations.strikethrough ? 'line-through' : annotations.underline ? 'underline' : 'none',
+        fontFamily: annotations.code ? 'monospace' : 'inherit',
+        backgroundColor: annotations.code ? '#f3f3f3' : 'transparent',
+        padding: annotations.code ? '2px 4px' : '0',
+        borderRadius: '4px',
+        color: annotations.color !== 'default' ? annotations.color : 'inherit'
+      }}>{plain_text}</span>;
+
+      if (href) {
+        return <a key={i} href={href} target="_blank" style={{ color: '#0066cc' }}>{element}</a>;
+      }
+      return element;
+    });
+  };
+
+  // 2. 根据块类型返回对应的 HTML 标签
+  switch (type) {
+    case 'paragraph':
+      return <p key={id} style={{ marginBottom: '1em', lineHeight: '1.8' }}>{renderText(value.rich_text)}</p>;
+    
+    case 'heading_1':
+      return <h1 key={id} style={{ fontSize: '1.8em', marginTop: '1.5em', marginBottom: '0.5em', fontWeight: 'bold' }}>{renderText(value.rich_text)}</h1>;
+    
+    case 'heading_2':
+      return <h2 key={id} style={{ fontSize: '1.5em', marginTop: '1.2em', marginBottom: '0.4em', fontWeight: 'bold' }}>{renderText(value.rich_text)}</h2>;
+    
+    case 'heading_3':
+      return <h3 key={id} style={{ fontSize: '1.2em', marginTop: '1em', marginBottom: '0.3em', fontWeight: 'bold' }}>{renderText(value.rich_text)}</h3>;
+
+    case 'bulleted_list_item':
+    case 'numbered_list_item':
+      return <li key={id} style={{ marginBottom: '0.5em', marginLeft: '1.2em' }}>{renderText(value.rich_text)}</li>;
+
+    case 'image':
+      const src = value.type === 'external' ? value.external.url : value.file.url;
+      return (
+        <figure key={id} style={{ margin: '1.5em 0', textAlign: 'center' }}>
+          <img src={src} alt="Notion Image" style={{ maxWidth: '100%', borderRadius: '8px' }} />
+          {value.caption && <figcaption style={{ fontSize: '0.8em', color: '#888', marginTop: '5px' }}>{renderText(value.caption)}</figcaption>}
+        </figure>
+      );
+
+    case 'code':
+      return (
+        <pre key={id} style={{ backgroundColor: '#f5f5f5', padding: '1em', borderRadius: '8px', overflowX: 'auto', marginBottom: '1em' }}>
+          <code style={{ fontSize: '0.9em', fontFamily: 'monospace' }}>{renderText(value.rich_text)}</code>
+        </pre>
+      );
+
+    case 'divider':
+      return <hr key={id} style={{ border: 'none', borderTop: '1px solid #eee', margin: '2em 0' }} />;
+
+    default:
+      return <div key={id} style={{ color: '#ccc', fontSize: '0.8em' }}>（暂不支持的块类型：{type}）</div>;
+  }
 }
