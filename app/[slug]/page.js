@@ -2,7 +2,10 @@ import Link from 'next/link';
 import NotionRenderer from '../../components/NotionRenderer';
 
 export default async function DynamicPage({ params }) {
-  const { slug } = params;
+  // 🚨 关键修复：在 Next.js 最新版中，必须 await params 才能拿到真实的 slug
+  const resolvedParams = await params;
+  const { slug } = resolvedParams;
+  
   const DATABASE_ID = process.env.NOTION_PAGE_ID;
   const TOKEN = process.env.NOTION_AUTH_TOKEN;
 
