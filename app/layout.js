@@ -29,13 +29,17 @@ export default function RootLayout({ children }) {
             <Link href="/" style={{ fontSize: '22px', fontWeight: '700', textDecoration: 'none', color: '#000', letterSpacing: '-0.5px' }}>
               Chen Yang
             </Link>
-            <nav style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
-              <Link href="/" style={navLinkStyle}>About</Link>
-              <Link href="/blog" style={navLinkStyle}>Blog</Link>
-              <Link href="/research" style={navLinkStyle}>Research</Link>
-              <Link href="/teaching" style={navLinkStyle}>Teaching</Link>
-              <Link href="/cnabout" style={{ ...navLinkStyle, color: '#0066cc' }}>中文</Link>
-            </nav>
+<nav style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
+  <Link href="/" style={navLinkStyle}>About</Link>
+  
+  {/* 暂时隐藏 Blog 菜单 
+  <Link href="/blog" style={navLinkStyle}>Blog</Link>
+  */}
+  
+  <Link href="/research" style={navLinkStyle}>Research</Link>
+  <Link href="/teaching" style={navLinkStyle}>Teaching</Link>
+  <Link href="/cnabout" style={{ ...navLinkStyle, color: '#0066cc' }}>中文</Link>
+</nav>
           </div>
         </header>
 
