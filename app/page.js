@@ -1,8 +1,8 @@
 export default async function HomePage() {
-  const DATABASE_ID = process.env.NOTION_DATABASE_ID;
-  const TOKEN = process.env.NOTION_TOKEN;
 
-  // 使用原生 fetch 直接调用 Notion API，告别插件兼容烦恼！
+  const DATABASE_ID = process.env.NOTION_PAGE_ID;
+  const TOKEN = process.env.NOTION_AUTH_TOKEN;
+
   const res = await fetch(`https://api.notion.com/v1/databases/${DATABASE_ID}/query`, {
     method: 'POST',
     headers: {
@@ -21,7 +21,6 @@ export default async function HomePage() {
         { property: 'date', direction: 'descending' }
       ]
     }),
-    // 让 Vercel 每 60 秒自动更新一次你的文章
     next: { revalidate: 60 }
   });
 
