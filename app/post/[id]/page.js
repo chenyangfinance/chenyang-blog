@@ -2,7 +2,10 @@ import Link from 'next/link';
 import NotionRenderer from '../../../components/NotionRenderer';
 
 export default async function PostPage({ params }) {
-  const { id } = params;
+  // 🚨 同样在这里加上 await 处理参数
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
+  
   const TOKEN = process.env.NOTION_AUTH_TOKEN;
 
   // 获取页面属性（标题、日期等）
