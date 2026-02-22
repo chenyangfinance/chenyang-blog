@@ -52,7 +52,7 @@ export default async function HomePage() {
           }}>
             <h2 style={{ fontSize: '18px', fontWeight: '500', margin: 0, letterSpacing: '0.5px' }}>
               {/* 🚨 变化在这里：加上了可点击的 Link，跳转路径是文章的 id */}
-              <Link href={`/${post.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+              <Link href={`/post/${post.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
                 {titleText}
               </Link>
             </h2>
