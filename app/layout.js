@@ -11,47 +11,74 @@ export default function RootLayout({ children }) {
       <body style={{ 
         margin: 0,
         padding: 0,
+        backgroundColor: '#fff',
+        // 全站统一字体族
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-        color: '#222',
-        lineHeight: '1.7',
+        color: '#1a1a1a',
+        lineHeight: '1.6',
         WebkitFontSmoothing: 'antialiased'
       }}>
-        {/* ⬇️ 把丢失的菜单栏补回来 */}
+        {/* 全局导航栏 - 增加高度和间距 */}
         <header style={{ 
-          maxWidth: '850px', 
-          margin: '0 auto', 
-          padding: '40px 20px 20px 20px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
+          borderBottom: '1px solid #f0f0f0', // 增加一条极细的分割线，增加精致感
+          marginBottom: '20px'
         }}>
-          <Link href="/" style={{ fontSize: '20px', fontWeight: 'bold', textDecoration: 'none', color: '#000' }}>
-            Chen Yang
-          </Link>
-          <nav style={{ display: 'flex', gap: '20px', fontSize: '15px' }}>
-            <Link href="/" style={{ color: '#666', textDecoration: 'none' }}>Blog</Link>
-            <Link href="/about" style={{ color: '#666', textDecoration: 'none' }}>About</Link>
-            <Link href="/research" style={{ color: '#666', textDecoration: 'none' }}>Research</Link>
-            <Link href="/teaching" style={{ color: '#666', textDecoration: 'none' }}>Teaching</Link>
-            <Link href="/cnabout" style={{ color: '#666', textDecoration: 'none' }}>中文</Link>
-          </nav>
+          <div style={{
+            maxWidth: '900px', // 稍微放宽一点
+            margin: '0 auto',
+            padding: '30px 20px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <Link href="/" style={{ 
+              fontSize: '22px', 
+              fontWeight: '700', 
+              textDecoration: 'none', 
+              color: '#000',
+              letterSpacing: '-0.5px'
+            }}>
+              Chen Yang
+            </Link>
+            
+            <nav style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
+              <Link href="/" style={navLinkStyle}>Blog</Link>
+              <Link href="/about" style={navLinkStyle}>About</Link>
+              <Link href="/research" style={navLinkStyle}>Research</Link>
+              <Link href="/teaching" style={navLinkStyle}>Teaching</Link>
+              <Link href="/cnabout" style={{ ...navLinkStyle, color: '#0066cc' }}>中文</Link>
+            </nav>
+          </div>
         </header>
 
-        {/* 页面具体内容 */}
-        <main>{children}</main>
+        {/* 页面主内容区 */}
+        <main style={{ minHeight: '60vh' }}>
+          {children}
+        </main>
 
+        {/* 底部信息栏 */}
         <footer style={{ 
-          maxWidth: '850px', 
-          margin: '80px auto 40px', 
+          maxWidth: '900px', 
+          margin: '100px auto 50px', 
           padding: '0 20px', 
-          borderTop: '1px solid #eee', 
-          paddingTop: '20px',
-          color: '#999',
-          fontSize: '13px'
+          textAlign: 'center',
+          borderTop: '1px solid #f0f0f0',
+          paddingTop: '30px',
+          color: '#888',
+          fontSize: '14px'
         }}>
-          © Chen Yang 2026 | Powered by Notion & Next.js
+          © {new Date().getFullYear()} Chen Yang | Powered by Notion
         </footer>
       </body>
     </html>
   );
 }
+
+// 统一的导航链接样式
+const navLinkStyle = {
+  color: '#555',
+  textDecoration: 'none',
+  fontSize: '15px',
+  fontWeight: '500',
+  transition: 'color 0.2s'
+};
