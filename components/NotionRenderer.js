@@ -48,7 +48,7 @@ case 'image':
                 <img 
                   src={src} 
                   style={{ 
-                    maxWidth: '50%',  // 👈 关键修改在这里
+                    maxWidth: '25%',  // 👈 关键修改在这里
                     maxHeight: '400px', 
                     objectFit: 'contain', 
                     borderRadius: '8px',
