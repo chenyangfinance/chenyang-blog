@@ -26,6 +26,10 @@ export default async function NotionRenderer({ blockId, token }) {
         const value = block[type];
         switch (type) {
           case 'paragraph':
+            // 🚨 新增逻辑：如果是空行，就用 <br /> 撑起高度，保留你的排版间距
+            if (!value.rich_text || value.rich_text.length === 0) {
+              return <p key={id} style={{ marginBottom: '1.2em' }}><br /></p>;
+            }
             return <p key={id} style={{ marginBottom: '1.2em' }}>{renderText(value.rich_text)}</p>;
           case 'heading_1':
             return <h1 key={id} style={{ fontSize: '1.8em', marginTop: '1.5em', marginBottom: '0.8em', fontWeight: 'bold' }}>{renderText(value.rich_text)}</h1>;
