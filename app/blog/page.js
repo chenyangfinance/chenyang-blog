@@ -8,7 +8,15 @@ export default async function BlogListPage() {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${TOKEN}`, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      filter: { property: 'type', select: { equals: 'Post' } },
+      filter: {
+        and: [
+          // 条件1：类型必须是 Post
+          { property: 'type', select: { equals: 'Post' } },
+          // 条件2：状态必须是 Published
+          // 🚨 注意：如果你的 Notion 列表头那一列叫 "Status" (大写 S)，请把下面的 'status' 改成 'Status'
+          { property: 'status', select: { equals: 'Published' } } 
+        ]
+      },
       sorts: [{ property: 'date', direction: 'descending' }],
     }),
     next: { revalidate: 60 },
@@ -24,7 +32,7 @@ export default async function BlogListPage() {
         {posts.map((post) => (
           <li key={post.id} style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column' }}>
             <Link href={`/post/${post.id}`} style={{ fontSize: '18px', color: '#0066cc', textDecoration: 'none', fontWeight: '500' }}>
-              {post.properties.title.title[0]?.plain_text || 'Untitled'}
+              {post.properties.title?.title[0]?.plain_text || 'Untitled'}
             </Link>
             <span style={{ color: '#999', fontSize: '14px', marginTop: '5px' }}>
               {post.properties.date?.date?.start || 'No Date'}
