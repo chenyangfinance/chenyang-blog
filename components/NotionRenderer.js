@@ -40,12 +40,22 @@ export default async function NotionRenderer({ blockId, token }) {
           case 'bulleted_list_item':
           case 'numbered_list_item':
             return <li key={id} style={{ marginLeft: '1.2em', marginBottom: '0.5em' }}>{renderText(value.rich_text)}</li>;
-          case 'image':
+case 'image':
             const src = value.type === 'external' ? value.external.url : value.file?.url;
             return src ? (
               <div key={id} style={{ margin: '1.5em 0', textAlign: 'center' }}>
-                {/* 🚨 这里限制了图片最大高度，完美解决印章过大问题 */}
-                <img src={src} style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain', borderRadius: '8px' }} alt="Notion Image" />
+                {/* 🚨 修改点：maxWidth 从 100% 改为 50%，图片宽度减半 */}
+                <img 
+                  src={src} 
+                  style={{ 
+                    maxWidth: '50%',  // 👈 关键修改在这里
+                    maxHeight: '400px', 
+                    objectFit: 'contain', 
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)' // 🎁 额外赠送：加个浅浅的阴影，更有质感
+                  }} 
+                  alt="Notion Image" 
+                />
               </div>
             ) : null;
           case 'column_list':
