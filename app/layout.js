@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
         </nav>
         <main>{children}</main>
         <footer style={{ marginTop: '100px', paddingTop: '20px', borderTop: '1px solid #eee', fontSize: '12px', color: '#999' }}>
-          © Chen Yang 1996 - 2026 | Powered by Vercel
+          © Chen Yang 2026 | Powered by Vercel
         </footer>
       </body>
     </html>
