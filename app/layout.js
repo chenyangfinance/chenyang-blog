@@ -1,35 +1,25 @@
+import "./globals.css"; // 确保保留你原有的样式导入
+
+export const metadata = {
+  title: "Chen Yang's Blog",
+  description: "Personal Website of Chen Yang",
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body style={{ 
-        maxWidth: '800px', 
-        margin: '0 auto', 
-        padding: '60px 20px', 
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-        color: '#111'
+        margin: 0,
+        padding: 0,
+        // ⬇️ 全站彻底统一的字体族
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+        color: '#222',
+        lineHeight: '1.7',
+        WebkitFontSmoothing: 'antialiased',
+        MozOsxFontSmoothing: 'grayscale'
       }}>
-        <nav style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          marginBottom: '60px' 
-        }}>
-          <div style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>Chen Yang</div>
-          <div style={{ display: 'flex', gap: '20px', fontSize: '14px', color: '#666' }}>
-            <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>Blog</a>
-            <a href="/about" style={{ textDecoration: 'none', color: 'inherit' }}>About</a>
-            <a href="/research" style={{ textDecoration: 'none', color: 'inherit' }}>Research</a>
-            <a href="/teaching" style={{ textDecoration: 'none', color: 'inherit' }}>Teaching</a>
-            <a href="/photos" style={{ textDecoration: 'none', color: 'inherit' }}>Photos</a>
-            <span style={{ cursor: 'pointer' }}>🔍</span>
-            <a href="/zh" style={{ textDecoration: 'none', color: 'inherit' }}>中文</a>
-          </div>
-        </nav>
-        <main>{children}</main>
-        <footer style={{ marginTop: '100px', paddingTop: '20px', borderTop: '1px solid #eee', fontSize: '12px', color: '#999' }}>
-          © Chen Yang 2026 | Powered by Vercel
-        </footer>
+        {children}
       </body>
     </html>
-  )
+  );
 }
