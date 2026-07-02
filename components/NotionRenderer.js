@@ -64,7 +64,7 @@ export default async function NotionRenderer({ blockId, token, compact = false }
           <div key={id} style={{ margin: '1.5em 0', textAlign: 'center' }}>
             {/* 🚨 修改点：maxWidth 从 100% 改为 50%，图片宽度减半 */}
             <img
-              src={src}
+              src={`/api/notion-image/${id}`}
               style={{
                 maxWidth: '25%',  // 👈 关键修改在这里
                 maxHeight: '400px',
