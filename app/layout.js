@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import './globals.css';
 
 export const metadata = {
   title: "Chen Yang's Personal Website",
@@ -12,24 +13,25 @@ export default function RootLayout({ children }) {
         margin: 0,
         padding: 0,
         backgroundColor: '#fff',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        fontFamily: '"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif',
         color: '#1d1d1f',
         lineHeight: '1.6',
         WebkitFontSmoothing: 'antialiased'
       }}>
-        <header style={{ borderBottom: '1px solid #f0f0f0', marginBottom: '40px' }}>
+        <header style={{ marginBottom: '72px' }}>
           <div style={{
-            maxWidth: '850px',
+            maxWidth: '1040px',
             margin: '0 auto',
-            padding: '30px 20px',
+            padding: '48px 24px 16px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center'
           }}>
-            <Link href="/" style={{ fontSize: '22px', fontWeight: '650', textDecoration: 'none', color: '#000', letterSpacing: '-0.02em' }}>
-              Chen Yang
+            <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '17px', fontWeight: '650', textDecoration: 'none', color: '#4b5563', letterSpacing: '0.01em' }}>
+              <span aria-hidden="true" style={{ width: '24px', height: '24px', display: 'inline-block', background: 'linear-gradient(135deg, #111 0%, #555 100%)' }} />
+              <span>Chen Yang</span>
             </Link>
-<nav style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
+<nav style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
   <Link href="/" style={navLinkStyle}>About</Link>
   
   {/* 暂时隐藏 Blog 菜单 
@@ -43,11 +45,11 @@ export default function RootLayout({ children }) {
           </div>
         </header>
 
-        <main style={{ maxWidth: '850px', margin: '0 auto', padding: '0 20px', minHeight: '60vh' }}>
+        <main style={{ maxWidth: '1040px', margin: '0 auto', padding: '0 24px', minHeight: '60vh' }}>
           {children}
         </main>
 
-        <footer style={{ maxWidth: '850px', margin: '80px auto 40px', padding: '20px', textAlign: 'center', borderTop: '1px solid #f0f0f0', color: '#999', fontSize: '13px' }}>
+        <footer style={{ maxWidth: '1040px', margin: '88px auto 48px', padding: '20px 24px', textAlign: 'center', color: '#9ca3af', fontSize: '13px' }}>
           © {new Date().getFullYear()} Chen Yang | Powered by Notion
         </footer>
       </body>
@@ -55,4 +57,4 @@ export default function RootLayout({ children }) {
   );
 }
 
-const navLinkStyle = { color: '#555', textDecoration: 'none', fontSize: '15px', fontWeight: '500', letterSpacing: '0', transition: 'color 0.2s' };
+const navLinkStyle = { color: '#111', textDecoration: 'none', fontSize: '17px', fontWeight: '450', letterSpacing: '0', transition: 'color 0.2s' };

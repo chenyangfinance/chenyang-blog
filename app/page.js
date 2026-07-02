@@ -28,8 +28,8 @@ export default async function HomePage() {
   }
 
   return (
-    <div>
-      <h1 style={{ fontSize: 'clamp(42px, 7vw, 56px)', fontWeight: 650, lineHeight: 1.05, marginBottom: '36px', letterSpacing: '-0.02em' }}>
+    <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+      <h1 style={{ fontSize: 'clamp(40px, 6vw, 52px)', fontWeight: 700, lineHeight: 1.08, marginBottom: '40px', letterSpacing: '-0.01em', color: '#000' }}>
         {page.properties.title.title[0]?.plain_text}
       </h1>
       <NotionRenderer blockId={page.id} token={TOKEN} />

@@ -1,5 +1,5 @@
 export default async function NotionRenderer({ blockId, token, compact = false }) {
-  const contentFontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+  const contentFontFamily = '"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif';
 
   const res = await fetch(`https://api.notion.com/v1/blocks/${blockId}/children?page_size=100`, {
     headers: { 'Authorization': `Bearer ${token}`, 'Notion-Version': '2022-06-28' },
@@ -52,11 +52,11 @@ export default async function NotionRenderer({ blockId, token, compact = false }
         }
         return <p key={id} style={{ marginBottom: compact ? '0.35em' : '1.2em' }}>{renderText(value.rich_text)}</p>;
       case 'heading_1':
-        return <h1 key={id} style={{ fontSize: '32px', lineHeight: 1.18, marginTop: '1.8em', marginBottom: '0.85em', fontWeight: 600, letterSpacing: '-0.01em' }}>{renderText(value.rich_text)}</h1>;
+        return <h1 key={id} style={{ fontSize: '34px', lineHeight: 1.2, marginTop: '1.75em', marginBottom: '0.9em', fontWeight: 650, letterSpacing: '-0.01em', color: '#000' }}>{renderText(value.rich_text)}</h1>;
       case 'heading_2':
-        return <h2 key={id} style={{ fontSize: '25px', lineHeight: 1.22, marginTop: '1.7em', marginBottom: '0.75em', fontWeight: 500, letterSpacing: '0' }}>{renderText(value.rich_text)}</h2>;
+        return <h2 key={id} style={{ fontSize: '28px', lineHeight: 1.25, marginTop: '1.75em', marginBottom: '0.8em', fontWeight: 450, letterSpacing: '0', color: '#1f2937' }}>{renderText(value.rich_text)}</h2>;
       case 'heading_3':
-        return <h3 key={id} style={{ fontSize: '19px', lineHeight: 1.3, marginTop: '1.4em', marginBottom: '0.55em', fontWeight: 600, letterSpacing: '0' }}>{renderText(value.rich_text)}</h3>;
+        return <h3 key={id} style={{ fontSize: '20px', lineHeight: 1.35, marginTop: '1.45em', marginBottom: '0.6em', fontWeight: 600, letterSpacing: '0', color: '#1f2937' }}>{renderText(value.rich_text)}</h3>;
       case 'quote':
         return (
           <blockquote key={id} style={{ margin: compact ? '0 0 0.35em 0' : '0 0 1.2em 0', paddingLeft: '1em', borderLeft: '3px solid #ddd', color: 'inherit' }}>
@@ -149,7 +149,7 @@ export default async function NotionRenderer({ blockId, token, compact = false }
   };
 
   return (
-    <div style={{ fontFamily: contentFontFamily, fontSize: '16px', fontWeight: 400, lineHeight: compact ? '1.45' : '1.58', color: '#1d1d1f', letterSpacing: '0' }}>
+    <div style={{ fontFamily: contentFontFamily, fontSize: '18px', fontWeight: 400, lineHeight: compact ? '1.5' : '1.85', color: '#4b5563', letterSpacing: '0' }}>
       {renderBlocks()}
     </div>
   );

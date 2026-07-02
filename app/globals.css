@@ -1,0 +1,35 @@
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+  src: url('/fonts/IBMPlexSansVar-Roman.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: italic;
+  src: url('/fonts/IBMPlexSansVar-Italic.woff2') format('woff2');
+}
+
+::selection {
+  background: rgba(45, 170, 219, 0.22);
+}
+
+html {
+  text-rendering: optimizeLegibility;
+}
+
+body::-webkit-scrollbar {
+  width: 5px;
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #b8b8b8;
+}
