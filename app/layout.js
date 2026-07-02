@@ -13,8 +13,8 @@ export default function RootLayout({ children }) {
         padding: 0,
         backgroundColor: '#fff',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-        color: '#222',
-        lineHeight: '1.7',
+        color: '#1d1d1f',
+        lineHeight: '1.6',
         WebkitFontSmoothing: 'antialiased'
       }}>
         <header style={{ borderBottom: '1px solid #f0f0f0', marginBottom: '40px' }}>
@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
             justifyContent: 'space-between',
             alignItems: 'center'
           }}>
-            <Link href="/" style={{ fontSize: '22px', fontWeight: '700', textDecoration: 'none', color: '#000', letterSpacing: '-0.5px' }}>
+            <Link href="/" style={{ fontSize: '22px', fontWeight: '650', textDecoration: 'none', color: '#000', letterSpacing: '-0.02em' }}>
               Chen Yang
             </Link>
 <nav style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
@@ -55,4 +55,4 @@ export default function RootLayout({ children }) {
   );
 }
 
-const navLinkStyle = { color: '#555', textDecoration: 'none', fontSize: '15px', fontWeight: '500', transition: 'color 0.2s' };
+const navLinkStyle = { color: '#555', textDecoration: 'none', fontSize: '15px', fontWeight: '500', letterSpacing: '0', transition: 'color 0.2s' };

@@ -38,7 +38,7 @@ export default async function DynamicPage({ params }) {
 
   return (
     <div>
-      <h1 style={{ fontSize: '2.5em', fontWeight: '800', marginBottom: '40px', letterSpacing: '-0.03em' }}>
+      <h1 style={{ fontSize: 'clamp(42px, 7vw, 56px)', fontWeight: 650, lineHeight: 1.05, marginBottom: '52px', letterSpacing: '-0.02em' }}>
         {page.properties.title.title[0]?.plain_text}
       </h1>
       <NotionRenderer blockId={page.id} token={TOKEN} />
