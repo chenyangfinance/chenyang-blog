@@ -1,4 +1,4 @@
-export default async function NotionRenderer({ blockId, token }) {
+export default async function NotionRenderer({ blockId, token, compact = false }) {
   const res = await fetch(`https://api.notion.com/v1/blocks/${blockId}/children?page_size=100`, {
     headers: { 'Authorization': `Bearer ${token}`, 'Notion-Version': '2022-06-28' },
     next: { revalidate: 60 }
@@ -22,8 +22,8 @@ export default async function NotionRenderer({ blockId, token }) {
   const isListItem = (type) => type === 'bulleted_list_item' || type === 'numbered_list_item';
 
   const renderChildren = (block) => block.has_children ? (
-    <div style={{ marginTop: '0.8em' }}>
-      <NotionRenderer blockId={block.id} token={token} />
+    <div style={{ marginTop: '0.45em' }}>
+      <NotionRenderer blockId={block.id} token={token} compact />
     </div>
   ) : null;
 
@@ -31,7 +31,7 @@ export default async function NotionRenderer({ blockId, token }) {
     const value = block[block.type];
 
     return (
-      <li key={block.id} style={{ marginBottom: '0.8em', paddingLeft: '0.2em' }}>
+      <li key={block.id} style={{ marginBottom: compact ? '0.25em' : '0.8em', paddingLeft: '0.2em' }}>
         {renderText(value.rich_text)}
         {renderChildren(block)}
       </li>
@@ -46,9 +46,9 @@ export default async function NotionRenderer({ blockId, token }) {
       case 'paragraph':
         // 🚨 新增逻辑：如果是空行，就用 <br /> 撑起高度，保留你的排版间距
         if (!value.rich_text || value.rich_text.length === 0) {
-          return <p key={id} style={{ marginBottom: '1.2em' }}><br /></p>;
+          return <p key={id} style={{ marginBottom: compact ? '0.35em' : '1.2em' }}><br /></p>;
         }
-        return <p key={id} style={{ marginBottom: '1.2em' }}>{renderText(value.rich_text)}</p>;
+        return <p key={id} style={{ marginBottom: compact ? '0.35em' : '1.2em' }}>{renderText(value.rich_text)}</p>;
       case 'heading_1':
         return <h1 key={id} style={{ fontSize: '1.8em', marginTop: '1.5em', marginBottom: '0.8em', fontWeight: 'bold' }}>{renderText(value.rich_text)}</h1>;
       case 'heading_2':
@@ -109,7 +109,7 @@ export default async function NotionRenderer({ blockId, token }) {
       const ListTag = listType === 'numbered_list_item' ? 'ol' : 'ul';
 
       elements.push(
-        <ListTag key={`list-${listItems[0].id}`} style={{ margin: '0 0 1.2em 0', paddingLeft: '1.6em' }}>
+        <ListTag key={`list-${listItems[0].id}`} style={{ margin: compact ? '0 0 0.35em 0' : '0 0 1.2em 0', paddingLeft: '1.6em' }}>
           {listItems.map(renderListItem)}
         </ListTag>
       );
@@ -119,7 +119,7 @@ export default async function NotionRenderer({ blockId, token }) {
   };
 
   return (
-    <div style={{ fontSize: '16px' }}>
+    <div style={{ fontSize: '16px', lineHeight: compact ? '1.45' : 'inherit' }}>
       {renderBlocks()}
     </div>
   );
