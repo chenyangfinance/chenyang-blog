@@ -24,6 +24,17 @@ function formatLocation(request) {
   return parts.length ? parts.join(', ') : 'Unknown';
 }
 
+function formatCountry(request) {
+  const code = request.headers.get('x-vercel-ip-country') || 'Unknown';
+  const countryNames = new Intl.DisplayNames(['en'], { type: 'region' });
+
+  if (code === 'Unknown') {
+    return { code, name: 'Unknown' };
+  }
+
+  return { code, name: countryNames.of(code) || code };
+}
+
 async function redisPipeline(commands) {
   if (!redisUrl || !redisToken) {
     return null;
@@ -46,6 +57,26 @@ async function redisPipeline(commands) {
   return res.json();
 }
 
+function normalizeCountries(rawCountries) {
+  const result = Array.isArray(rawCountries)
+    ? rawCountries.reduce((items, value, index, source) => {
+        if (index % 2 === 0) {
+          const [code, name = code] = String(value).split('|');
+          items.push({ code, name, visits: Number(source[index + 1]) || 0 });
+        }
+        return items;
+      }, [])
+    : Object.entries(rawCountries || {}).map(([country, visits]) => {
+        const [code, name = code] = String(country).split('|');
+        return { code, name, visits: Number(visits) || 0 };
+      });
+
+  return result
+    .filter((item) => item.code)
+    .sort((a, b) => b.visits - a.visits)
+    .slice(0, 8);
+}
+
 function normalizeLocations(rawLocations) {
   const result = Array.isArray(rawLocations)
     ? rawLocations.reduce((items, value, index, source) => {
@@ -63,6 +94,7 @@ function normalizeLocations(rawLocations) {
 async function readStats() {
   const data = await redisPipeline([
     ['GET', 'site:visits:total'],
+    ['HGETALL', 'site:visits:countries'],
     ['HGETALL', 'site:visits:locations']
   ]);
 
@@ -73,7 +105,8 @@ async function readStats() {
   return {
     configured: true,
     total: Number(data[0]?.result) || 0,
-    locations: normalizeLocations(data[1]?.result)
+    countries: normalizeCountries(data[1]?.result),
+    locations: normalizeLocations(data[2]?.result)
   };
 }
 
@@ -88,9 +121,13 @@ export async function GET() {
 export async function POST(request) {
   try {
     const location = formatLocation(request);
+    const country = formatCountry(request);
+    const countryKey = `${country.code}|${country.name}`;
     const data = await redisPipeline([
       ['INCR', 'site:visits:total'],
+      ['HINCRBY', 'site:visits:countries', countryKey, 1],
       ['HINCRBY', 'site:visits:locations', location, 1],
+      ['HGETALL', 'site:visits:countries'],
       ['HGETALL', 'site:visits:locations']
     ]);
 
@@ -101,7 +138,8 @@ export async function POST(request) {
     return Response.json({
       configured: true,
       total: Number(data[0]?.result) || 0,
-      locations: normalizeLocations(data[2]?.result)
+      countries: normalizeCountries(data[3]?.result),
+      locations: normalizeLocations(data[4]?.result)
     }, { headers });
   } catch {
     return Response.json({ configured: false, total: null, locations: [] }, { status: 500, headers });
