@@ -57,6 +57,29 @@ export default async function NotionRenderer({ blockId, token, compact = false }
         return <h2 key={id} style={{ fontSize: '1.5em', marginTop: '1.5em', marginBottom: '0.8em', fontWeight: 650 }}>{renderText(value.rich_text)}</h2>;
       case 'heading_3':
         return <h3 key={id} style={{ fontSize: '1.2em', marginTop: '1.2em', marginBottom: '0.5em', fontWeight: 650 }}>{renderText(value.rich_text)}</h3>;
+      case 'quote':
+        return (
+          <blockquote key={id} style={{ margin: compact ? '0 0 0.35em 0' : '0 0 1.2em 0', paddingLeft: '1em', borderLeft: '3px solid #ddd', color: 'inherit' }}>
+            {renderText(value.rich_text)}
+            {renderChildren(block)}
+          </blockquote>
+        );
+      case 'callout':
+        return (
+          <div key={id} style={{ marginBottom: compact ? '0.35em' : '1.2em' }}>
+            {renderText(value.rich_text)}
+            {renderChildren(block)}
+          </div>
+        );
+      case 'to_do':
+        return (
+          <div key={id} style={{ display: 'flex', gap: '0.6em', alignItems: 'baseline', marginBottom: compact ? '0.35em' : '0.8em' }}>
+            <span>{value.checked ? '☑' : '☐'}</span>
+            <span>{renderText(value.rich_text)}</span>
+          </div>
+        );
+      case 'divider':
+        return <hr key={id} style={{ border: 0, borderTop: '1px solid #eee', margin: compact ? '0.8em 0' : '2em 0' }} />;
       case 'bulleted_list_item':
       case 'numbered_list_item':
         return renderListItem(block);
@@ -83,7 +106,12 @@ export default async function NotionRenderer({ blockId, token, compact = false }
       case 'column':
         return <div key={id} style={{ flex: 1, minWidth: '300px' }}><NotionRenderer blockId={id} token={token} /></div>;
       default:
-        return null;
+        return value?.rich_text?.length ? (
+          <p key={id} style={{ marginBottom: compact ? '0.35em' : '1.2em' }}>
+            {renderText(value.rich_text)}
+            {renderChildren(block)}
+          </p>
+        ) : block.has_children ? <div key={id}>{renderChildren(block)}</div> : null;
     }
   };
 
