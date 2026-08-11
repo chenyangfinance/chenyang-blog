@@ -40,6 +40,7 @@ export default function RootLayout({ children }) {
   
   <Link href="/research" style={navLinkStyle}>Research</Link>
   <Link href="/teaching" style={navLinkStyle}>Teaching</Link>
+  <Link href="/ailiterature" style={navLinkStyle}>AI Reading</Link>
   <Link href="/cnabout" style={{ ...navLinkStyle, color: '#0066cc' }}>中文</Link>
 </nav>
           </div>
