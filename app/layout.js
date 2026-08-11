@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
         WebkitFontSmoothing: 'antialiased'
       }}>
         <header style={{ marginBottom: '72px' }}>
-          <div style={{
+          <div className="site-header-inner" style={{
             maxWidth: '1040px',
             margin: '0 auto',
             padding: '48px 24px 16px',
@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
               <span aria-hidden="true" style={{ width: '24px', height: '24px', display: 'inline-block', background: 'linear-gradient(135deg, #111 0%, #555 100%)' }} />
               <span>Chen Yang</span>
             </Link>
-<nav style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
+<nav className="site-nav" style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
   <Link href="/" style={navLinkStyle}>About</Link>
   
   {/* 暂时隐藏 Blog 菜单 
